@@ -2,7 +2,7 @@
 
 In today's workshop, we'll be building a ticket-buying widget, for buying specific seats at a concert (or hockey game, or airplane). Here's a GIF of the flow:
 
-![demo flow](./assets/demo.gif)
+![demo flow](./__lecture/assets/demo.gif)
 
 To add a sense of realism, this workshop features **a Node.js server**. This server will tell you which seats are available, and let you process (fake) credit cards to charge tickets.
 
@@ -389,14 +389,14 @@ This `TicketWidget` component has the following responsibilities:
 
 When you're done, you should have a UI like this:
 
-![TicketWidget initial UI](./assets/just-the-seats.png)
+![TicketWidget initial UI](./__lecture/assets/just-the-seats.png)
 
 Critically, you'll notice that there are 8 rows, with 12 seats per row. This is because this is what the server tells us, with the `numOfSeats` and `seatsPerRow` variables. Your job is to take this data and produce this UI :)
 
 _HINT:_ Remember, the image is provided in `src/assets/seat-available.svg`. Images can be `import`ed just like JS modules!
 
 ```js
-import happyMealSrc from '../assets/happy-meal.jpg';
+import happyMealSrc from '../__lecture/assets/happy-meal.jpg';
 
 const McDonalds = () => {
   return <img alt="a meal with a toy" src={happyMealSrc} />;
@@ -440,7 +440,7 @@ This is a challenging task! Don't be afraid to ask TCs for help.
 
 At the end of this task, your UI should look like this:
 
-![TicketWidget polished UI](./assets/ex-4.gif)
+![TicketWidget polished UI](./__lecture/assets/ex-4.gif)
 
 _HINT:_ For the loading spinner, you can use the `CircularProgress` component from Material UI: https://material-ui.com/components/progress/
 
@@ -487,7 +487,7 @@ We can add `disabled={true}` to this button if the seat is booked.
 
 Let's watch the GIF from the beginning again:
 
-![demo flow](./assets/demo.gif)
+![demo flow](./__lecture/assets/demo.gif)
 
 (To view the GIF in VS Code: open the Command Palette with cmd+shift+P or control+shift+P, and start typing "Markdown: Open preview to the side". The option should pop up as you type, and you can select it).
 
@@ -563,7 +563,7 @@ The modal should show a little table with the seat information, as well as a for
 
 Your goal should be to create a UI that looks something like this, pulling all relevant data from the `BookingContext` state:
 
-![Modal contents](./assets/modal.png)
+![Modal contents](./__lecture/assets/modal.png)
 
 You can also create two new pieces of React state: `creditCard` and `expiration`. Use the `useState` hook for both of these pieces of state:
 
@@ -627,7 +627,7 @@ We're in pretty good shape! There are a few final things we should add though.
 
 If we successfully purchase a ticket, we want to show a success snackbar:
 
-![Success snackbar](./assets/snackbar.png)
+![Success snackbar](./__lecture/assets/snackbar.png)
 
 This is a component from Material UI. We can use the `BookingContext` status to decide whether to show it (if the `status` is `purchased`). Additionally, we need to be able to dismiss it; create a new action that sets the status back to `idle`, which will automatically hide the snackbar.
 
@@ -651,7 +651,7 @@ Just in case, though, some are provided:
 
 After purchasing a seat, it becomes grey, the same as any other unavailable seat. Ideally, this seat would be visually distinct, to indicate that the current user has purchased it! Maybe a checkmark could be shown on top of it?
 
-![Checkmark showing the previously-purchased seat](./assets/purchased-indicator.png)
+![Checkmark showing the previously-purchased seat](./__lecture/assets/purchased-indicator.png)
 
 ### Stretch goal 2: Purchasing multiple seats
 
