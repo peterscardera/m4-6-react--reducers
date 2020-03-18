@@ -35,17 +35,16 @@ export const PurchasedModal = () => {
     error,
     selectedSeatId,
     price,
-    actions: { cancellation, purchaseAttempt }
+    actions: { cancellation, purchaseAttempt, purchaseSuccess, serverFailure}
   } = React.useContext(BookingContext);
 
-  
-
+  console.log(status, error);
   const { rowName, seatNum } = decodeSeatId(selectedSeatId);
 
   const [creditCard, setCreditCard] = React.useState("");
   const [expiration, setExpiration] = React.useState("");
-  
-console.log(creditCard)
+
+  //console.log(creditCard, expiration);
   //---------------------------------RENDER---------------------------------
 
   return (
@@ -98,51 +97,54 @@ console.log(creditCard)
             headers: {
               "Content-Type": "application/json"
             },
-            body: JSON.stringify({ seatId:selectedSeatId, creditCard, expiration })
-          }).then(res=> res.json())
-          .then(data=> {
-            console.log(data)
+            body: JSON.stringify({
+              seatId: selectedSeatId,
+              creditCard,
+              expiration
+            })
           })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                purchaseSuccess();
+                // console.log(data);
+              } else {
+                serverFailure(data.message)
+              }
+            }).catch(error=> {
+              console.log(error)
+            })
         }}
       >
-        <DialogActions>
-          <FormControl variant="outlined">
-            <InputLabel
-              htmlFor="component-outlined"
-              value={creditCard}
-              onChange={e => {
-                setCreditCard(e.target.value);
-              }}
-            >
-              {" "}
-              <FaCreditCard /> CC
-            </InputLabel>
-            <OutlinedInput
-              style={{ flex: 2 }}
-              id="component-outlined"
-              label="CreditCard"
-            />
-          </FormControl>
-          <FormControl variant="outlined">
-            <InputLabel
-              value={expiration}
-              onChange={e => {
-                setExpiration(e.target.value);
-              }}
-              htmlFor="component-outlined"
-            >
-              MM/YY
-            </InputLabel>
-            <OutlinedInput
-              style={{ flex: 1 }}
-              id="component-outlined"
-              label="Expiration"
-            />
-          </FormControl>
-          <Button type="submit" color="primary">
-            Purchase
-          </Button>
-        </DialogActions>
+        <FormControl variant="outlined">
+          <InputLabel htmlFor="credit">
+            <FaCreditCard /> CC
+          </InputLabel>
+          <OutlinedInput
+            style={{ flex: 2 }}
+            id="credit"
+            label="credit"
+            value={creditCard}
+            onChange={e => {
+              setCreditCard(e.currentTarget.value);
+            }}
+          />
+        </FormControl>
+        <FormControl variant="outlined">
+          <InputLabel htmlFor="expiration">MM/YY</InputLabel>
+          <OutlinedInput
+            style={{ flex: 1 }}
+            id="expiration"
+            label="expiration"
+            value={expiration}
+            onChange={e => {
+              setExpiration(e.currentTarget.value);
+            }}
+          />
+        </FormControl>
+        <Button type="submit" color="primary">
+          Purchase
+        </Button>
       </BottomRow>
     </Dialog>
   );

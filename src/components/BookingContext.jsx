@@ -37,7 +37,21 @@ const reducer = (state, action) => {
         error: null
       }
     }
+    case "purchase-success": {
+      return {
+        ...state,
+        status: "purchased"
+      }
+    }
+    case "purchase-failure" : {
+      return {
+        ...state,
+        status:"something went wrong",
+        error: action.serverResponse
+      }
+    }
   }
+
 };
 
 export const BookingProvider = ({ children }) => {
@@ -58,11 +72,16 @@ export const BookingProvider = ({ children }) => {
     dispatch({type: "purchase-attempt"})
   },[dispatch])
 
-  
+  const purchaseSuccess = React.useCallback(()=> {
+    dispatch({type: "purchase-success"})
+  },[dispatch])
 
+  const serverFailure = React.useCallback((serverResponse)=> {
+    dispatch({type: "purchase-failure", serverResponse })
+  })
   return (
     <BookingContext.Provider
-      value={{ ...state, actions: { beginBookingProcess, cancellation, purchaseAttempt } }}
+      value={{ ...state, actions: { serverFailure, beginBookingProcess, cancellation, purchaseAttempt, purchaseSuccess } }}
     >
       {children}
     </BookingContext.Provider>
