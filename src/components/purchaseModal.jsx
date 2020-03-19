@@ -9,9 +9,8 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import { FaCreditCard } from "react-icons/fa";
 
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+
 import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -30,6 +29,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 
 export const PurchasedModal = () => {
+
   const {
     status,
     error,
@@ -57,7 +57,7 @@ export const PurchasedModal = () => {
           }}
         >
           <IoIosCloseCircleOutline
-            color={"red"}
+            color={"gray"}
             size={"3em"}
           ></IoIosCloseCircleOutline>
         </StyledButton>
@@ -110,9 +110,10 @@ export const PurchasedModal = () => {
                 // console.log(data);
               } else {
                 serverFailure(data.message)
+                
               }
             }).catch(error=> {
-              console.log(error)
+              console.error(error)
             })
         }}
       >
@@ -143,9 +144,12 @@ export const PurchasedModal = () => {
           />
         </FormControl>
         <Button type="submit" color="primary">
-          Purchase
+          {status === "awaiting" ? (<CircularProgress/>) : "Purchase"}
+          
         </Button>
       </BottomRow>
+      <StyledStatus> {status === "something went wrong" ? "Error on our end..." : ""} 
+      {error === "Please provide credit card information!" ? "Please provide credit card information!" : ""} </StyledStatus>
     </Dialog>
   );
 };
@@ -167,3 +171,10 @@ const StyledButton = styled.button`
   left: 10%;
   align-items: end;
 `;
+
+
+const StyledStatus = styled.div`
+margin-top: 10px;
+text-alighn: center;
+color: red;
+`

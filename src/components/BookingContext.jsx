@@ -40,7 +40,8 @@ const reducer = (state, action) => {
     case "purchase-success": {
       return {
         ...state,
-        status: "purchased"
+        status: "purchased",
+        selectedSeatId: null
       }
     }
     case "purchase-failure" : {
@@ -48,6 +49,12 @@ const reducer = (state, action) => {
         ...state,
         status:"something went wrong",
         error: action.serverResponse
+      }
+    }
+    case "remove-conf-bar" : {
+      return {
+        ...state,
+        status: "idle"
       }
     }
   }
@@ -79,11 +86,19 @@ export const BookingProvider = ({ children }) => {
   const serverFailure = React.useCallback((serverResponse)=> {
     dispatch({type: "purchase-failure", serverResponse })
   })
+
+const removeConfirmation = React.useCallback(()=> {
+  dispatch({type:"remove-conf-bar"})
+})
+
   return (
     <BookingContext.Provider
-      value={{ ...state, actions: { serverFailure, beginBookingProcess, cancellation, purchaseAttempt, purchaseSuccess } }}
+      value={{ ...state, actions: { removeConfirmation, serverFailure, beginBookingProcess, cancellation, purchaseAttempt, purchaseSuccess } }}
     >
       {children}
     </BookingContext.Provider>
   );
 };
+
+
+//if i wrote 'state' only and not using the spread operator.. id have to consuemr by breaking down the obj like actions

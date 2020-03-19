@@ -5,6 +5,8 @@ import GlobalStyles from "./GlobalStyles";
 import styled from "styled-components";
 import { BookingContext } from "./BookingContext"
 import { PurchasedModal } from "./purchaseModal"
+import ConfirmationBar from "./ConfirmationBar"
+
 
 function App() {
   const {
@@ -26,6 +28,7 @@ function App() {
       <StyledDiv>
         <TicketWidget />
         <PurchasedModal />
+        <ConfirmationBar/>
       </StyledDiv>
      
     </>
