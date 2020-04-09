@@ -8,21 +8,13 @@ const ConfirmationBar = () => {
     status,
     actions: { removeConfirmation }
   } = useContext(BookingContext);
-  //console.log("looking for purchased from status update", status)
-  console.log(status);
-  const [open, setOpen] = useState(false);
-
-  //ask if this is good
-  useEffect(() => {
-    if (status === "purchased") {
-      setOpen(true);
-    } else if (status === "idle") {
-      setOpen(false);
-    }
-  });
 
   return (
-    <Snackbar open={open} autoHideDuration={3000} onClose={removeConfirmation}>
+    <Snackbar
+      open={status === "purchased" ? true : false}
+      autoHideDuration={3000}
+      onClose={removeConfirmation}
+    >
       <Alert severity="success">Purchased successfuly. Enjoy!</Alert>
     </Snackbar>
   );

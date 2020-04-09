@@ -29,13 +29,12 @@ import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 
 export const PurchasedModal = () => {
-
   const {
     status,
     error,
     selectedSeatId,
     price,
-    actions: { cancellation, purchaseAttempt, purchaseSuccess, serverFailure}
+    actions: { cancellation, purchaseAttempt, purchaseSuccess, serverFailure }
   } = React.useContext(BookingContext);
 
   console.log(status, error);
@@ -43,6 +42,32 @@ export const PurchasedModal = () => {
 
   const [creditCard, setCreditCard] = React.useState("");
   const [expiration, setExpiration] = React.useState("");
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      purchaseAttempt();
+      const data = await fetch("/api/book-seat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          seatId: selectedSeatId,
+          creditCard,
+          expiration
+        })
+      });
+      const response = await data.json();
+      if (response.success === undefined) {
+        return serverFailure(response.message);
+      }
+      return purchaseSuccess();
+    } catch (err) {
+      purchaseSuccess();
+      console.log(err);
+    }
+  };
 
   //console.log(creditCard, expiration);
   //---------------------------------RENDER---------------------------------
@@ -86,37 +111,7 @@ export const PurchasedModal = () => {
         </Table>
       </DialogContent>
 
-      <BottomRow
-        onSubmit={e => {
-          e.preventDefault();
-          //console.log("cliked buy");
-          purchaseAttempt();
-          //console.log(status)
-          fetch("/api/book-seat", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              seatId: selectedSeatId,
-              creditCard,
-              expiration
-            })
-          })
-            .then(res => res.json())
-            .then(data => {
-              if (data.success) {
-                purchaseSuccess();
-                // console.log(data);
-              } else {
-                serverFailure(data.message)
-                
-              }
-            }).catch(error=> {
-              console.error(error)
-            })
-        }}
-      >
+      <BottomRow onSubmit={e => handleSubmit(e)}>
         <FormControl variant="outlined">
           <InputLabel htmlFor="credit">
             <FaCreditCard /> CC
@@ -144,18 +139,23 @@ export const PurchasedModal = () => {
           />
         </FormControl>
         <Button type="submit" color="primary">
-          {status === "awaiting" ? (<CircularProgress/>) : "Purchase"}
-          
+          {status === "awaiting" ? <CircularProgress /> : "Purchase"}
         </Button>
       </BottomRow>
-      <StyledStatus> {status === "something went wrong" ? "Error on our end..." : ""} 
-      {error === "Please provide credit card information!" ? "Please provide credit card information!" : ""} </StyledStatus>
+      <StyledStatus>
+        {" "}
+        {status === "something went wrong" ? "Error on our end..." : ""}
+        {error === "Please provide credit card information!"
+          ? "Please provide credit card information!"
+          : ""}{" "}
+      </StyledStatus>
     </Dialog>
   );
 };
 
 const BottomRow = styled.form`
   display: flex;
+  margin: 0px 10px;
 `;
 
 const TopRow = styled.div`
@@ -172,9 +172,8 @@ const StyledButton = styled.button`
   align-items: end;
 `;
 
-
 const StyledStatus = styled.div`
-margin-top: 10px;
-text-alighn: center;
-color: red;
-`
+  margin-top: 10px;
+  text-align: center;
+  color: red;
+`;

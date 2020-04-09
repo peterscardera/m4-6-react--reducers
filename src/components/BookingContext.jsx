@@ -1,6 +1,4 @@
 import React from "react";
-import styled from "styled-components";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 export const BookingContext = React.createContext();
 
@@ -29,36 +27,35 @@ const reducer = (state, action) => {
         price: null
       };
     }
-    //to move from begin-booking-process case 
+    //to move from begin-booking-process case
     case "purchase-attempt": {
       return {
         ...state,
         status: "awaiting",
         error: null
-      }
+      };
     }
     case "purchase-success": {
       return {
         ...state,
         status: "purchased",
         selectedSeatId: null
-      }
+      };
     }
-    case "purchase-failure" : {
+    case "purchase-failure": {
       return {
         ...state,
-        status:"something went wrong",
+        status: "something went wrong",
         error: action.serverResponse
-      }
+      };
     }
-    case "remove-conf-bar" : {
+    case "remove-conf-bar": {
       return {
         ...state,
         status: "idle"
-      }
+      };
     }
   }
-
 };
 
 export const BookingProvider = ({ children }) => {
@@ -75,30 +72,39 @@ export const BookingProvider = ({ children }) => {
     dispatch({ type: "cancel" });
   }, [dispatch]);
 
-  const purchaseAttempt = React.useCallback(()=> {
-    dispatch({type: "purchase-attempt"})
-  },[dispatch])
+  const purchaseAttempt = React.useCallback(() => {
+    dispatch({ type: "purchase-attempt" });
+  }, [dispatch]);
 
-  const purchaseSuccess = React.useCallback(()=> {
-    dispatch({type: "purchase-success"})
-  },[dispatch])
+  const purchaseSuccess = React.useCallback(() => {
+    dispatch({ type: "purchase-success" });
+  }, [dispatch]);
 
-  const serverFailure = React.useCallback((serverResponse)=> {
-    dispatch({type: "purchase-failure", serverResponse })
-  })
+  const serverFailure = React.useCallback(serverResponse => {
+    dispatch({ type: "purchase-failure", serverResponse });
+  });
 
-const removeConfirmation = React.useCallback(()=> {
-  dispatch({type:"remove-conf-bar"})
-})
+  const removeConfirmation = React.useCallback(() => {
+    dispatch({ type: "remove-conf-bar" });
+  });
 
   return (
     <BookingContext.Provider
-      value={{ ...state, actions: { removeConfirmation, serverFailure, beginBookingProcess, cancellation, purchaseAttempt, purchaseSuccess } }}
+      value={{
+        ...state,
+        actions: {
+          removeConfirmation,
+          serverFailure,
+          beginBookingProcess,
+          cancellation,
+          purchaseAttempt,
+          purchaseSuccess
+        }
+      }}
     >
       {children}
     </BookingContext.Provider>
   );
 };
-
 
 //if i wrote 'state' only and not using the spread operator.. id have to consuemr by breaking down the obj like actions

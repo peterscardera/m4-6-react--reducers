@@ -3,18 +3,14 @@ import { SeatContext } from "./SeatContext";
 import TicketWidget from "./TicketWidget";
 import GlobalStyles from "./GlobalStyles";
 import styled from "styled-components";
-import { BookingContext } from "./BookingContext"
-import { PurchasedModal } from "./purchaseModal"
-import ConfirmationBar from "./ConfirmationBar"
-
+import { BookingContext } from "./BookingContext";
+import { PurchasedModal } from "./purchaseModal";
+import ConfirmationBar from "./ConfirmationBar";
 
 function App() {
   const {
-    
     actions: { receiveSeatInfoFromServer }
   } = useContext(SeatContext);
-
-  
 
   useEffect(() => {
     fetch("/api/seat-availability")
@@ -28,9 +24,8 @@ function App() {
       <StyledDiv>
         <TicketWidget />
         <PurchasedModal />
-        <ConfirmationBar/>
+        <ConfirmationBar />
       </StyledDiv>
-     
     </>
   );
 }
@@ -38,7 +33,6 @@ function App() {
 export default App;
 
 const StyledDiv = styled.div`
- 
   display: flex;
   justify-content: center;
 `;
